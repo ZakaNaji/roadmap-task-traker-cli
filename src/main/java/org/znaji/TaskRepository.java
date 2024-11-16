@@ -53,8 +53,17 @@ public class TaskRepository {
         writeToFile();
     }
 
-    public List<Task> listAll() {
-        return tasks;
+    public List<Task> listTasks(String ...args) {
+        if (args.length == 1) {
+            return tasks;
+        }
+        if (args.length == 2) {
+            final String status = args[1].toUpperCase();
+            return tasks.stream()
+                    .filter(task -> task.getStatus().name().equals(status))
+                    .toList();
+        }
+        throw new IllegalArgumentException("Invalid arguments");
     }
 
     private void writeToFile() {

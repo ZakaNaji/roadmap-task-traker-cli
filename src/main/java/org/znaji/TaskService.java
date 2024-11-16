@@ -32,7 +32,7 @@ public class TaskService {
 
     private void listTasks(String[] args) {
         System.out.printf("%-5s %-20s %-10s%n", "ID", "Name", "Status");
-        for (Task task : taskRepository.listAll()) {
+        for (Task task : taskRepository.listTasks(args)) {
             System.out.printf("%-5d %-20s %-10s%n", task.getId(), task.getName(), task.getStatus());
         }
     }
