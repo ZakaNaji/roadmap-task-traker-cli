@@ -13,7 +13,7 @@ public class TaskService {
             throw new IllegalArgumentException("Command is required");
         }
         switch (args[0]) {
-            case "add" -> addTask(args[1]);
+            case "add" -> addTask(args);
             case "list" -> listTasks(args);
             case "update" -> updateTask(args);
             case "delete" -> deleteTask(args);
@@ -32,7 +32,7 @@ public class TaskService {
             throw new IllegalArgumentException("Task ID is required");
         }
         final String status = args[0].replace("mark-", "").toLowerCase();
-        final Long id = Long.parseLong(args[1]);
+        final Long id = Utils.validateId(args[1]);
         final TaskStatus taskStatus = Utils.getStatus(status);
         taskRepository.markTask(id, taskStatus);
     }
@@ -41,7 +41,7 @@ public class TaskService {
         if (args.length < 2) {
             throw new IllegalArgumentException("Task ID is required");
         }
-        final Long id = Long.parseLong(args[1]);
+        final long id = Utils.validateId(args[1]);
         taskRepository.delete(id);
 
     }
@@ -50,8 +50,8 @@ public class TaskService {
         if (args.length < 3) {
             throw new IllegalArgumentException("Task ID and new name are required");
         }
-        final Long id = Long.parseLong(args[1]);
-        final String name = args[2];
+        final long id = Utils.validateId(args[1]);
+        final String name = Utils.validateName(args[2]);
         taskRepository.update(id, name);
 
     }
@@ -63,8 +63,8 @@ public class TaskService {
         }
     }
 
-    private void addTask(String name) {
-        final Task task = new Task(name);
+    private void addTask(String ...args) {
+        final Task task = new Task(Utils.validateName(args[1]));
         task.setCreatedAt(Utils.formatDate(new Date()));
         task.setStatus(TaskStatus.TODO);
         taskRepository.add(task);

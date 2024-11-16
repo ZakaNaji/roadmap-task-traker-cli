@@ -18,7 +18,10 @@ public class Utils {
     }
 
     public static TaskStatus getStatus(String status) {
-        return statusMap.get(status);
+        if (status == null) {
+            throw new IllegalArgumentException("Status is required");
+        }
+        return statusMap.get(status.toLowerCase());
     }
 
     public static String getStatus(TaskStatus status) {
@@ -28,5 +31,24 @@ public class Utils {
                 .map(Map.Entry::getKey)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid status"));
+    }
+
+    public static String validateName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name is required");
+        }
+        return name;
+    }
+
+    public static long validateId(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Invalid ID");
+        }
+        try {
+            return Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid ID");
+        }
+
     }
 }
