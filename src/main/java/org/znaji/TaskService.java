@@ -23,17 +23,28 @@ public class TaskService {
     }
 
     private void deleteTask(String[] args) {
+        if (args.length < 2) {
+            throw new IllegalArgumentException("Task ID is required");
+        }
+        final Long id = Long.parseLong(args[1]);
+        taskRepository.delete(id);
 
     }
 
     private void updateTask(String[] args) {
+        if (args.length < 3) {
+            throw new IllegalArgumentException("Task ID and new name are required");
+        }
+        final Long id = Long.parseLong(args[1]);
+        final String name = args[2];
+        taskRepository.update(id, name);
 
     }
 
     private void listTasks(String[] args) {
-        System.out.printf("%-5s %-20s %-10s%n", "ID", "Name", "Status");
+        System.out.printf("%-5s %-40s %-10s%n", "ID", "Name", "Status");
         for (Task task : taskRepository.listTasks(args)) {
-            System.out.printf("%-5d %-20s %-10s%n", task.getId(), task.getName(), task.getStatus());
+            System.out.printf("%-5d %-40s %-10s%n", task.getId(), task.getName(), task.getStatus());
         }
     }
 

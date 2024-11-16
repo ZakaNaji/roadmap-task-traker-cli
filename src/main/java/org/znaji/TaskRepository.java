@@ -83,7 +83,17 @@ public class TaskRepository {
         }
     }
 
-    private void readFromFile() {
+    public void update(Long id, String name) {
+        final Task task = tasks.stream()
+                .filter(t -> t.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+        task.setName(name);
+        writeToFile();
+    }
 
+    public void delete(Long id) {
+        tasks.removeIf(task -> task.getId().equals(id));
+        writeToFile();
     }
 }
