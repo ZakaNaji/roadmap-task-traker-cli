@@ -3,6 +3,7 @@ package org.znaji;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -20,13 +21,26 @@ public class TaskRepository {
 
     private List<Task> loadArray() {
         final List<Task> tasks = new ArrayList<>();
-        String[] tasksJsonArray = Files.readString(jsonPath).replace("[", "")
-                .replace("]", "")
-                .split("},");
-        for (String taskJson : tasksJsonArray) {
-            tasks.add(Task.fromJson(taskJson));
-        }
 
+        try {
+            String fileAsString = Files.readString(jsonPath)
+                    .replace("[\n", "")
+                    .replace("\n]", "");
+            if (fileAsString.isBlank()) {
+                return tasks;
+            }
+            String[] tasksJsonArray = fileAsString
+                    .split("},");
+            for (String taskJson : tasksJsonArray) {
+                if (!taskJson.endsWith("}")) {
+                    taskJson += "}";
+                }
+                tasks.add(Task.fromJson(taskJson));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tasks;
     }
 
     public void add(Task task) {
@@ -39,26 +53,27 @@ public class TaskRepository {
         writeToFile();
     }
 
-    public String listAll() {
-        return null;
+    public List<Task> listAll() {
+        return tasks;
     }
 
     private void writeToFile() {
-        try(FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-            final String tasksJson = createTasksJson();
-            fileOutputStream.write(tasksJson.getBytes());
-        } catch (Exception e) {
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[\n");
+        for (Task task : tasks) {
+            stringBuilder.append(task.toJson()).append(",");
+        }
+        stringBuilder.append("\n]");
+        try {
+            Files.writeString(
+                   jsonPath,
+                   stringBuilder.toString()
+            );
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String createTasksJson() {
-        final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[");
-
-        stringBuilder.append("]");
-        return stringBuilder.toString();
-    }
     private void readFromFile() {
 
     }
