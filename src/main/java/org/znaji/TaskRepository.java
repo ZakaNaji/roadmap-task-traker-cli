@@ -39,7 +39,7 @@ public class TaskRepository {
                 tasks.add(Task.fromJson(taskJson));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Utils.printError("Failed to read file, " + e.getMessage());
         }
         return tasks;
     }
@@ -80,7 +80,7 @@ public class TaskRepository {
                    stringBuilder.toString()
             );
         } catch (IOException e) {
-            e.printStackTrace();
+            Utils.printError("Failed to write to file, " + e.getMessage());
         }
     }
 
