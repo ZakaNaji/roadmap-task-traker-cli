@@ -4,11 +4,14 @@ public class Task {
     private Long id;
     private String name;
     private TaskStatus status;
+    private String createdAt;
+    private String updatedAt;
 
-    public Task(Long id, String name, TaskStatus status) {
-        this.id = id;
+    public Task() {
+    }
+
+    public Task(String name) {
         this.name = name;
-        this.status = status;
     }
 
     public static Task fromJson(String takJson) {
@@ -16,11 +19,26 @@ public class Task {
                 .replace("}", "")
                 .replace("\"", "")
                 .split(",");
-        final Long id = Long.parseLong(attributes[0].split(":")[1].strip());
-        final String name = attributes[1].split(":")[1].strip();
-        final TaskStatus status = TaskStatus.valueOf(attributes[2].split(":")[1].strip());
+        final Task task = new Task();
+        task.setId(Long.parseLong(attributes[0].split(":")[1].strip()));
+        task.setName(attributes[1].split(":")[1].strip());
+        task.setStatus(Utils.getStatus(attributes[2].split(":")[1].strip()));
+        task.setCreatedAt(attributes[3].split(":")[1].strip());
+        task.setUpdatedAt(attributes[4].split(":")[1].strip());
 
-        return new Task(id, name, status);
+        return task;
+    }
+
+    public String  toJson() {
+        final String json = """
+                {
+                    "id": %d,
+                    "name": "%s",
+                    "status": "%s",
+                    "createdAt": "%s",
+                    "updatedAt": "%s"
+                }""";
+        return String.format(json, id, name, Utils.getStatus(status), createdAt, updatedAt);
     }
 
     public Long getId() {
@@ -47,13 +65,20 @@ public class Task {
         this.status = status;
     }
 
-    public String  toJson() {
-        final String json = """
-                {
-                    "id": %d,
-                    "name": "%s",
-                    "status": "%s"
-                }""";
-        return String.format(json, id, name, status);
+    public String getCreatedAt() {
+        return createdAt;
     }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
 }

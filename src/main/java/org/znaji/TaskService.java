@@ -1,17 +1,12 @@
 package org.znaji;
 
+import java.util.Date;
 import java.util.Map;
 
 public class TaskService {
 
 
     final TaskRepository taskRepository = new TaskRepository();
-    final Map
-            <String, TaskStatus> statusMap = Map.of(
-            "todo", TaskStatus.TODO,
-            "done", TaskStatus.DONE,
-            "in-progress", TaskStatus.IN_PROGRESS
-    );
 
     public void run(String... args) {
         if (args.length < 1) {
@@ -38,7 +33,7 @@ public class TaskService {
         }
         final String status = args[0].replace("mark-", "").toLowerCase();
         final Long id = Long.parseLong(args[1]);
-        final TaskStatus taskStatus = statusMap.get(status);
+        final TaskStatus taskStatus = Utils.getStatus(status);
         taskRepository.markTask(id, taskStatus);
     }
 
@@ -62,13 +57,17 @@ public class TaskService {
     }
 
     private void listTasks(String[] args) {
-        System.out.printf("%-5s %-40s %-10s%n", "ID", "Name", "Status");
+        System.out.printf("%-5s %-55s %-10s %-15s %-15s%n", "ID", "Name", "Status", "Created At", "Updated At");
         for (Task task : taskRepository.listTasks(args)) {
-            System.out.printf("%-5d %-40s %-10s%n", task.getId(), task.getName(), task.getStatus());
+            System.out.printf("%-5d %-55s %-10s %-15s %-15s%n", task.getId(), task.getName(), task.getStatus(), task.getCreatedAt(), task.getUpdatedAt());
         }
     }
 
     private void addTask(String name) {
-        taskRepository.add(new Task(null, name, TaskStatus.TODO));
+        final Task task = new Task(name);
+        task.setCreatedAt(Utils.formatDate(new Date()));
+        task.setStatus(TaskStatus.TODO);
+        taskRepository.add(task);
     }
+
 }
