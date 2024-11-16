@@ -1,7 +1,7 @@
 
 # Task Tracker CLI
 
-Task Tracker CLI is a simple command-line application developed in Java to help you manage your tasks efficiently. 
+Task Tracker CLI is a simple command-line application developed in Java to help you manage your tasks efficiently.
 It allows you to add, list, update, delete, and mark tasks with different statuses.
 
 ---
@@ -13,6 +13,12 @@ It allows you to add, list, update, delete, and mark tasks with different status
 - **Update Tasks**: Modify the name of an existing task.
 - **Delete Tasks**: Remove tasks by their ID.
 - **Mark Tasks**: Change the status of tasks to `TODO`, `IN_PROGRESS`, or `DONE`.
+
+---
+
+## Project URL
+
+This project is hosted on GitHub: [Task Tracker CLI](https://github.com/ZakaNaji/roadmap-task-traker-cli)
 
 ---
 
