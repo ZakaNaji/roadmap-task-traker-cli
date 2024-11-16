@@ -11,8 +11,16 @@ public class Task {
         this.status = status;
     }
 
-    public static Task fromJson(String taskJson) {
-        return null;
+    public static Task fromJson(String takJson) {
+        String[] attributes = takJson.replace("{", "")
+                .replace("}", "")
+                .replace("\"", "")
+                .split(",");
+        final Long id = Long.parseLong(attributes[0].split(":")[1].strip());
+        final String name = attributes[1].split(":")[1].strip();
+        final TaskStatus status = TaskStatus.valueOf(attributes[2].split(":")[1].strip());
+
+        return new Task(id, name, status);
     }
 
     public Long getId() {
@@ -37,5 +45,15 @@ public class Task {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public String  toJson() {
+        final String json = """
+                {
+                    "id": %d,
+                    "name": "%s",
+                    "status": "%s"
+                }""";
+        return String.format(json, id, name, status);
     }
 }
