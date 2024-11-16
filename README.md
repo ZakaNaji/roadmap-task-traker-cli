@@ -16,10 +16,9 @@ It allows you to add, list, update, delete, and mark tasks with different status
 
 ---
 
-## Project URL
+## Roadmap Project Reference
 
-This project is hosted on GitHub: [Task Tracker CLI](https://github.com/ZakaNaji/roadmap-task-traker-cli)
-
+This project is a solution for the **Task Tracker** challenge from [Roadmap.sh](https://roadmap.sh/projects/task-tracker).
 ---
 
 ## Prerequisites
