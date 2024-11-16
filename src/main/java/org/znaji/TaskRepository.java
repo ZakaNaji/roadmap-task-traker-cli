@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,7 +91,7 @@ public class TaskRepository {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Task not found"));
         task.setName(name);
-        task.setUpdatedAt(Utils.formatDate(new Date()));
+        task.setUpdatedAt(LocalDateTime.now());
         writeToFile();
     }
 
@@ -105,7 +106,7 @@ public class TaskRepository {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Task not found"));
         task.setStatus(taskStatus);
-        task.setUpdatedAt(Utils.formatDate(new Date()));
+        task.setUpdatedAt(LocalDateTime.now());
         writeToFile();
     }
 }

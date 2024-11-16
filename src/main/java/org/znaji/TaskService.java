@@ -1,5 +1,6 @@
 package org.znaji;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -57,15 +58,15 @@ public class TaskService {
     }
 
     private void listTasks(String[] args) {
-        System.out.printf("%-5s %-55s %-10s %-15s %-15s%n", "ID", "Name", "Status", "Created At", "Updated At");
+        System.out.printf("%-5s %-55s %-10s %-20s %-20s%n", "ID", "Name", "Status", "Created At", "Updated At");
         for (Task task : taskRepository.listTasks(args)) {
-            System.out.printf("%-5d %-55s %-10s %-15s %-15s%n", task.getId(), task.getName(), task.getStatus(), task.getCreatedAt(), task.getUpdatedAt());
+            System.out.printf("%-5d %-50s %-10s %-20s %-20s%n", task.getId(), task.getName(), task.getStatus(), task.getCreatedAt(), task.getUpdatedAt());
         }
     }
 
     private void addTask(String ...args) {
         final Task task = new Task(Utils.validateName(args[1]));
-        task.setCreatedAt(Utils.formatDate(new Date()));
+        task.setCreatedAt(LocalDateTime.now());
         task.setStatus(TaskStatus.TODO);
         taskRepository.add(task);
     }
