@@ -31,11 +31,13 @@ public class TaskService {
     }
 
     private void listTasks(String[] args) {
-        System.out.println("Tasks:" + taskRepository.listAll());
+        System.out.printf("%-5s %-20s %-10s%n", "ID", "Name", "Status");
+        for (Task task : taskRepository.listAll()) {
+            System.out.printf("%-5d %-20s %-10s%n", task.getId(), task.getName(), task.getStatus());
+        }
     }
 
     private void addTask(String name) {
-
         taskRepository.add(new Task(null, name, TaskStatus.TODO));
     }
 }
