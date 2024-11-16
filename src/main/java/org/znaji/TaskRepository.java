@@ -96,4 +96,13 @@ public class TaskRepository {
         tasks.removeIf(task -> task.getId().equals(id));
         writeToFile();
     }
+
+    public void markTask(Long id, TaskStatus taskStatus) {
+        final Task task = tasks.stream()
+                .filter(t -> t.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+        task.setStatus(taskStatus);
+        writeToFile();
+    }
 }

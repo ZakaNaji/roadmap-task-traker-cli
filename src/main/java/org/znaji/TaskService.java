@@ -1,9 +1,17 @@
 package org.znaji;
 
+import java.util.Map;
+
 public class TaskService {
 
 
     final TaskRepository taskRepository = new TaskRepository();
+    final Map
+            <String, TaskStatus> statusMap = Map.of(
+            "todo", TaskStatus.TODO,
+            "done", TaskStatus.DONE,
+            "in-progress", TaskStatus.IN_PROGRESS
+    );
 
     public void run(String... args) {
         if (args.length < 1) {
@@ -14,12 +22,24 @@ public class TaskService {
             case "list" -> listTasks(args);
             case "update" -> updateTask(args);
             case "delete" -> deleteTask(args);
-            case "mark" -> markTask(args);
-            default -> throw new IllegalArgumentException("Unknown command: " + args[0]);
+            default -> {
+                if (args[0].startsWith("mark-")) {
+                    markTask(args);
+                } else {
+                    throw new IllegalArgumentException("Invalid command");
+                }
+            }
         }
     }
 
     private void markTask(String[] args) {
+        if (args.length < 2) {
+            throw new IllegalArgumentException("Task ID is required");
+        }
+        final String status = args[0].replace("mark-", "").toLowerCase();
+        final Long id = Long.parseLong(args[1]);
+        final TaskStatus taskStatus = statusMap.get(status);
+        taskRepository.markTask(id, taskStatus);
     }
 
     private void deleteTask(String[] args) {
